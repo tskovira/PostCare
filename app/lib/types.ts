@@ -34,3 +34,13 @@ export type RecordCategory = {
   name: string;
   count: number;
 };
+
+export type HealthRecord = {
+  id: string;
+  type: string;
+  title: string;
+  date: string;
+  provider: string;
+  notes: string;
+  source: "Entered by you";
+};

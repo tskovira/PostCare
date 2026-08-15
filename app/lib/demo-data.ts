@@ -3,6 +3,7 @@ import type {
   HealthArea,
   NavigationItem,
   RecordCategory,
+  HealthRecord,
   TimelineEntry,
 } from "./types";
 
@@ -73,4 +74,10 @@ export const documents: DocumentRow[] = [
   { title: "Annual metabolic panel", detail: "Allegheny Health Lab · PDF", area: "Primary care", date: "Jul 28, 2026" },
   { title: "Dental X-ray · Tooth 19", detail: "Northside Dental · Image", area: "Dental", date: "May 30, 2026" },
   { title: "Vision prescription", detail: "Oakland Vision Center · PDF", area: "Vision", date: "Jan 14, 2026" },
+];
+
+export const initialHealthRecords: HealthRecord[] = [
+  { id: "record-1", type: "Dental", title: "Routine exam and cleaning", date: "2026-08-12", provider: "Dr. Maya Chen", notes: "No new cavities. Continue monitoring sensitivity near tooth 19.", source: "Entered by you" },
+  { id: "record-2", type: "Medication", title: "Amoxicillin 500 mg", date: "2026-06-03", provider: "Northside Dental", notes: "Completed seven-day course after dental procedure.", source: "Entered by you" },
+  { id: "record-3", type: "Primary care", title: "Annual wellness visit", date: "2026-02-18", provider: "Dr. Elena Brooks", notes: "Routine physical and preventive care review.", source: "Entered by you" },
 ];
