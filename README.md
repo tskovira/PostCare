@@ -90,11 +90,10 @@ Do not place real patient or medical information in the prototype. A public rele
 
 ## Product documentation
 
-The project is supported by separate living documents covering:
+The repository now includes the following technical foundation documents:
 
-- Product charter
-- Product requirements
-- UX architecture
-- Future authorization and provenance design
-- Future system architecture and threat model
+- [`docs/technical-architecture.md`](docs/technical-architecture.md)
+- [`docs/security-boundaries.md`](docs/security-boundaries.md)
+- [`docs/development-roadmap.md`](docs/development-roadmap.md)
 
+Separate living product documents cover the product charter, product requirements, and UX architecture.
