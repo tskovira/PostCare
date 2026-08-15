@@ -44,3 +44,14 @@ export type HealthRecord = {
   notes: string;
   source: "Entered by you";
 };
+
+export type HealthDocument = {
+  id: string;
+  title: string;
+  fileName: string;
+  contentType: string;
+  sizeBytes: number;
+  healthArea: string;
+  status: "available";
+  uploadedAt: string;
+};
