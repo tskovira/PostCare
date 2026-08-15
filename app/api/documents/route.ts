@@ -2,6 +2,7 @@ import { and, desc, eq } from "drizzle-orm";
 import { getDb } from "../../../db";
 import { documents } from "../../../db/schema";
 import { getChatGPTUser } from "../../chatgpt-auth";
+import { writeAuditEvent } from "../../../db/audit";
 
 const maxBytes = 10 * 1024 * 1024;
 const areas = new Set(["Primary care", "Dental", "Vision", "Specialist", "Medication", "Lab result", "Other"]);
@@ -44,6 +45,7 @@ export async function GET(request: Request) {
     if (!metadata) return Response.json({ error: "Document not found." }, { status: 404 });
     const object = await (await getBucket()).get(metadata.objectKey);
     if (!object) return Response.json({ error: "Stored file not found." }, { status: 404 });
+    await writeAuditEvent({ ownerEmail: owner, action: "opened", entityType: "document", entityId: metadata.id, entityLabel: metadata.title });
     const safeName = metadata.fileName.replace(/["\\\r\n]/g, "_");
     return new Response(object.body, { headers: { "content-type": metadata.contentType, "content-length": String(metadata.sizeBytes), "content-disposition": `inline; filename="${safeName}"`, "cache-control": "private, no-store", "x-content-type-options": "nosniff" } });
   } catch (error) {
@@ -73,6 +75,7 @@ export async function POST(request: Request) {
     await bucket.put(storedKey, bytes, { httpMetadata: { contentType }, customMetadata: { documentId: id } });
     const db = await getDb();
     const [row] = await db.insert(documents).values({ id, ownerEmail: owner, objectKey: storedKey, title, fileName: file.name.slice(0, 255) || "document", contentType, sizeBytes: file.size, healthArea }).returning();
+    await writeAuditEvent({ ownerEmail: owner, action: "uploaded", entityType: "document", entityId: row.id, entityLabel: row.title });
     return Response.json({ document: serialize(row) }, { status: 201 });
   } catch (error) {
     if (storedKey) { try { await (await getBucket()).delete(storedKey); } catch {} }

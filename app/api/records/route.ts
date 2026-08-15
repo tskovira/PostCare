@@ -2,6 +2,7 @@ import { and, desc, eq } from "drizzle-orm";
 import { getDb } from "../../../db";
 import { healthRecords } from "../../../db/schema";
 import { getChatGPTUser } from "../../chatgpt-auth";
+import { writeAuditEvent } from "../../../db/audit";
 
 type RecordPayload = { id?: string; type?: string; title?: string; date?: string; provider?: string; notes?: string };
 const allowedTypes = new Set(["Primary care", "Dental", "Vision", "Specialist", "Medication", "Lab result"]);
@@ -53,6 +54,7 @@ export async function POST(request: Request) {
     if ("error" in result) return Response.json({ error: result.error }, { status: 400 });
     const db = await getDb();
     const [record] = await db.insert(healthRecords).values({ id: crypto.randomUUID(), ownerEmail: owner, ...result.value }).returning();
+    await writeAuditEvent({ ownerEmail: owner, action: "created", entityType: "health_record", entityId: record.id, entityLabel: record.title });
     return Response.json({ record: serialize(record) }, { status: 201 });
   } catch (error) {
     return Response.json({ error: error instanceof Error ? error.message : "Unable to add record." }, { status: 500 });
@@ -70,6 +72,7 @@ export async function PUT(request: Request) {
     const db = await getDb();
     const [record] = await db.update(healthRecords).set({ ...result.value, updatedAt: new Date().toISOString() }).where(and(eq(healthRecords.id, payload.id), eq(healthRecords.ownerEmail, owner))).returning();
     if (!record) return Response.json({ error: "Record not found." }, { status: 404 });
+    await writeAuditEvent({ ownerEmail: owner, action: "updated", entityType: "health_record", entityId: record.id, entityLabel: record.title });
     return Response.json({ record: serialize(record) });
   } catch (error) {
     return Response.json({ error: error instanceof Error ? error.message : "Unable to update record." }, { status: 500 });

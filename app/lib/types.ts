@@ -1,4 +1,4 @@
-export type ViewId = "home" | "timeline" | "dental" | "records" | "documents";
+export type ViewId = "home" | "timeline" | "dental" | "records" | "documents" | "activity";
 
 export type NavigationItem = {
   id: ViewId;
@@ -54,4 +54,14 @@ export type HealthDocument = {
   healthArea: string;
   status: "available";
   uploadedAt: string;
+};
+
+export type AuditEvent = {
+  id: string;
+  actor: string;
+  action: "created" | "updated" | "uploaded" | "opened";
+  entityType: "health_record" | "document";
+  entityId: string;
+  entityLabel: string;
+  occurredAt: string;
 };

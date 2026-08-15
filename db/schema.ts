@@ -30,3 +30,16 @@ export const documents = sqliteTable("documents", {
 }, (table) => [
   index("documents_owner_uploaded_idx").on(table.ownerEmail, table.uploadedAt),
 ]);
+
+export const auditEvents = sqliteTable("audit_events", {
+  id: text("id").primaryKey(),
+  ownerEmail: text("owner_email").notNull(),
+  actorEmail: text("actor_email").notNull(),
+  action: text("action").notNull(),
+  entityType: text("entity_type").notNull(),
+  entityId: text("entity_id").notNull(),
+  entityLabel: text("entity_label").notNull(),
+  occurredAt: text("occurred_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+}, (table) => [
+  index("audit_events_owner_occurred_idx").on(table.ownerEmail, table.occurredAt),
+]);
