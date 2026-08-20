@@ -1,17 +1,17 @@
 # PostCare
 
-PostCare is a responsive, patient-controlled personal health record application. It gives adults one account for organizing appointments, medications, health details, records, documents, and specialists across primary care, dental, vision, hospitals, pharmacies, and other healthcare providers.
+PostCare is a responsive, patient-controlled personal health record application. It gives users one account for organizing appointments, medications, health details, records, documents, and specialists across primary care, dental, vision, hospitals, pharmacies, and other healthcare providers.
 
-**Live application:** [americanpostcare.com](https://americanpostcare.com)
+**Website:** [americanpostcare.com](https://americanpostcare.com)
 
-> PostCare is under active development and is not a substitute for professional medical advice, diagnosis, treatment, or emergency services. Do not use the development environment for real protected health information.
+> PostCare is not a substitute for professional medical advice, diagnosis, treatment, or emergency services.
 
 ## Current features
 
 - Email/password and Google authentication through Supabase
 - Account-scoped data that persists between sessions
 - Dashboard with health summaries and recent activity
-- Appointment creation, editing, deletion, and calendar export (`.ics`)
+- Appointment creation, editing, deletion, and calendar export
 - Medication tracking
 - Conditions and allergy tracking
 - General health profile management
@@ -35,55 +35,6 @@ Calendar files work with Google Calendar, Apple Calendar, Microsoft Outlook, and
 - Supabase Authentication
 - Tailwind CSS utilities and project CSS
 
-## Project structure
-
-```text
-app/
-  api/                 Server endpoints for PostCare data and workflows
-  components/          Dashboard, forms, views, navigation, and settings
-  lib/                 Shared types, authentication, demo helpers, and calendar export
-  share/               Token-based shared-summary page
-db/                    Database access, authorization, auditing, and schema
-drizzle/               Versioned D1 database migrations
-docs/                  Architecture, security, and development documentation
-public/                Static application assets
-scripts/               Build and validation helpers
-tests/                 Automated rendered-output tests
-worker/                Cloudflare worker entry point
-.openai/hosting.json   Hosted application resource configuration
-```
-
-## Run locally
-
-### Requirements
-
-- Node.js 22.13 or newer
-- npm
-
-### Setup
-
-```bash
-git clone https://github.com/tskovira/PostCare.git
-cd PostCare
-npm install
-npm run dev
-```
-
-Open the local URL printed by the development server.
-
-The hosted application depends on configured D1 and R2 bindings. Local development and deployments must use appropriately isolated resources and must never contain production patient data.
-
-## Useful commands
-
-```bash
-npm run dev                 # Start the local development server
-npm run lint                # Run lint checks
-npm test                    # Build and run the automated test suite
-npm run build               # Create a production build
-npm run db:generate         # Generate a migration after schema changes
-npm run validate:artifact   # Validate the built deployment artifact
-```
-
 ## Data and security model
 
 - API routes resolve the authenticated account on the server.
@@ -92,20 +43,6 @@ npm run validate:artifact   # Validate the built deployment artifact
 - Documents are stored separately from structured database records.
 - Public sharing uses revocable tokens rather than exposing account sessions.
 - Secrets and local environment files are excluded from version control.
-
-PostCare is still a pre-production application. Handling real medical information requires a formal security program, privacy and regulatory review, vendor agreements where applicable, threat modeling, monitoring, backups, incident response, and comprehensive testing before launch.
-
-## Development direction
-
-Major remaining production milestones include:
-
-1. Complete production security and compliance review.
-2. Add stronger session controls, MFA/passkeys, and verified recovery processes.
-3. Add document scanning, validation, and processing workers.
-4. Expand automated integration, authorization, and accessibility testing.
-5. Add standards-based healthcare imports using FHIR/SMART integrations.
-6. Add operational monitoring, backup restoration tests, and incident procedures.
-7. Complete the scheduled final-deletion worker for expired deletion requests.
 
 ## Documentation
 
