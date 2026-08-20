@@ -1,0 +1,11 @@
+"use client";
+import { useEffect, useState } from "react";
+
+type SharedRecord = { id: string; type: string; title: string; recordDate: string; provider: string; notes: string };
+type Summary = { label: string; expiresAt: string; generatedAt: string; records: SharedRecord[] };
+
+export function SharedSummary({ token }: { token: string }) {
+  const [summary, setSummary] = useState<Summary | null>(null); const [error, setError] = useState("");
+  useEffect(() => { fetch(`/api/shared?token=${encodeURIComponent(token)}`).then(async (response) => { const body = await response.json() as { summary?: Summary; error?: string }; if (!response.ok || !body.summary) throw new Error(body.error ?? "Unable to open shared summary."); return body.summary; }).then(setSummary).catch((reason: unknown) => setError(reason instanceof Error ? reason.message : "Unable to open shared summary.")); }, [token]);
+  return <main className="shared-page"><div className="shared-brand"><span>+</span><strong>PostCare</strong></div>{error ? <section className="shared-state"><b>Link unavailable</b><h1>This health summary cannot be opened</h1><p>{error}</p></section> : !summary ? <section className="shared-state"><p>Verifying secure link…</p></section> : <><header className="shared-header"><p className="kicker">READ-ONLY HEALTH SUMMARY</p><h1>Shared health records</h1><p>Prepared for {summary.label} · Available until {new Date(summary.expiresAt).toLocaleString()}</p><button className="secondary" onClick={() => window.print()}>Print summary</button></header><div className="shared-notice">This is patient-maintained information shared through a time-limited link. Confirm clinical details with the patient or original provider.</div><section className="shared-records">{summary.records.map((record) => <article key={record.id}><div><span>{record.type}</span><time>{new Date(`${record.recordDate}T12:00:00`).toLocaleDateString()}</time></div><h2>{record.title}</h2><strong>{record.provider || "No provider recorded"}</strong><p>{record.notes || "No notes added."}</p></article>)}</section><footer>Read-only · No documents or account details included · Generated {new Date(summary.generatedAt).toLocaleString()}</footer></>}</main>;
+}

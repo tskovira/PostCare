@@ -1,18 +1,18 @@
 import type { ReactNode } from "react";
-import { timelineEntries } from "../lib/demo-data";
+import type { TimelineEntry, ViewId } from "../lib/types";
 
 export function Badge({ children, kind = "neutral" }: { children: ReactNode; kind?: string }) {
   return <span className={`badge ${kind}`}>{children}</span>;
 }
 
-export function TimelineList({ compact = false }: { compact?: boolean }) {
+export function TimelineList({ items = [], compact = false, onSelect }: { items?: TimelineEntry[]; compact?: boolean; onSelect?: (view: ViewId) => void }) {
   return (
     <div className="timeline-list">
-      {timelineEntries.map((item) => (
-        <button className="timeline-item" key={`${item.date}-${item.title}`}>
+      {items.length === 0 ? <div className="timeline-empty">No health activity has been recorded yet.</div> : items.map((item) => (
+        <button className="timeline-item" key={item.id} onClick={() => onSelect?.(item.destination)}>
           <span className={`timeline-dot ${item.tone}`} />
           <span className="timeline-copy">
-            <span className="eyebrow">{item.date} · {item.type}</span>
+            <span className="eyebrow">{new Date(item.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })} · {item.type}</span>
             <strong>{item.title}</strong>
             <span className="muted">{item.provider}</span>
             {!compact && (

@@ -11,7 +11,12 @@ test("renders development preview metadata", async () => {
 
   const response = await worker.fetch(
     new Request("http://localhost/", {
-      headers: { accept: "text/html" },
+      headers: {
+        accept: "text/html",
+        "oai-authenticated-user-email": "preview@postcare.test",
+        "oai-authenticated-user-full-name": "PostCare%20Preview",
+        "oai-authenticated-user-full-name-encoding": "percent-encoded-utf-8",
+      },
     }),
     {
       ASSETS: {

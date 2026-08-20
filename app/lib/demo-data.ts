@@ -4,17 +4,20 @@ import type {
   NavigationItem,
   RecordCategory,
   HealthRecord,
-  TimelineEntry,
 } from "./types";
 
 export const navigationItems: NavigationItem[] = [
   { id: "home", label: "Home", icon: "⌂" },
-  { id: "timeline", label: "Timeline", icon: "◷" },
+  { id: "appointments", label: "Appointments", icon: "◫" },
+  { id: "medications", label: "Medications", icon: "Rx" },
+  { id: "clinical-facts", label: "Health", icon: "♡" },
   { id: "records", label: "Records", icon: "▤" },
   { id: "documents", label: "Documents", icon: "□" },
+  { id: "dental", label: "Specialists", icon: "⌘" },
+  { id: "exports", label: "Share", icon: "⇩" },
 ];
 
-export const timelineEntries: TimelineEntry[] = [
+export const timelineEntries = [
   {
     date: "Aug 12, 2026",
     type: "Dental visit",

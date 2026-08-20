@@ -1,5 +1,2 @@
-import { AppShell } from "./components/app-shell";
-
-export default function Page() {
-  return <AppShell />;
-}
+import { AuthGate } from "./components/auth-gate";
+export default function Page(){return <AuthGate/>;}
